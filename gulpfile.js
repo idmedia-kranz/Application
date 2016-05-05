@@ -38,10 +38,9 @@ var runSequence = require('run-sequence');
 var tap = require("gulp-tap");
 var path = require("path");
 var sourcemaps = require('gulp-sourcemaps');
-var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var embedTemplates = require('gulp-angular-embed-templates');
-var embedStyles = require('gulp-angular-embed-styles');
+var embedStyles = require('./node_modules_own/gulp-angular-embed-styles');
 
  gulp.task('compile_scss', function() {
   return gulp.src(conf.sources.scss)

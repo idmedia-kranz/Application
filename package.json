@@ -29,6 +29,7 @@
     "gulp-watch": "latest",
 	"gulp-uglify": "latest",
 	"gulp-angular-embed-templates": "latest",
+	"gulp-nodemon": "latest",
     "path": "latest",
     "run-sequence": "latest",
     "typescript": "^1.9.0-dev.20160503",
