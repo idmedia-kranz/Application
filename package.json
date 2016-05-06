@@ -16,7 +16,8 @@
     "rxjs": "5.0.0-beta.6",
     "socket.io": "latest",
     "systemjs": "0.19.26",
-    "zone.js": "0.6.12"
+    "zone.js": "0.6.12",
+    "fs": "0.0.2"
   },
   "devDependencies": {
     "gulp": "latest",

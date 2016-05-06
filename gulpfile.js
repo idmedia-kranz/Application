@@ -7,7 +7,8 @@ var conf = {
 	sources: {
 		typings: 'typings/browser.d.ts',
 		ts: 'src/ts/**/*.ts',
-		ts_assets: 'src/ts/**/*.{css,html}',
+		ts_html: 'src/ts/**/*.html',
+		ts_css: 'src/ts/**/*.css',
 		js_main: 'src/js/[!_]*.js',
 		js: 'src/js/**/*.js',
 		scss: 'src/scss/**/*.scss',
@@ -65,7 +66,7 @@ gulp.task('compile_ts', function() {
 });
 
 gulp.task('transfer_ts_assets', function() {
-	return gulp.src(conf.sources.ts_assets)
+	return gulp.src([conf.sources.ts_html, conf.sources.ts_css])
 	.pipe(gulp.dest(conf.output.temp));
 });
 
@@ -107,20 +108,13 @@ gulp.task('clean_output', function() {
 gulp.task('nodemon', function() {
 	nodemon({ 
 		script: 'app.js',
-		ignore: ["app/**/*", "src/**/*"],
-		stdout: false
+		ignore: ["app/*", "src", 'gulpfile.js', 'temp', 'node_modules'],
+		stdout: true
 	}).on('restart', function () {
 		console.log("Restart Node");
-	}).on('readable', function() {
-		this.stdout.on('data', function(chunk) {
-			if (/^listening/.test(chunk)) {
-				livereload.reload();
-			}
-			process.stdout.write(chunk);
-		})
+		setTimeout(livereload.reload, 1000);
 	});
 });			
-	
 	
 gulp.task('livereload', function() {
     return livereload.reload();
@@ -131,7 +125,7 @@ gulp.task('start',[], function () {
 	
 	livereload.listen();
 	
-	watch([conf.sources.ts, conf.sources.ts_assets], function(vinyl){
+	watch([conf.sources.ts, conf.sources.ts_html, conf.sources.ts_css], function(vinyl){
 		console.log("ts File Changed: ", vinyl.path);
 		runSequence('compile_ts', 'transfer_ts_assets', 'embed_ts_assets', 'livereload');
 	});
