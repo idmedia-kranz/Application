@@ -37,3 +37,4 @@ app/*
 app.js
 temp/*
 typings/*
+dbconfig.json

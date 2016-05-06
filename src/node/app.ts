@@ -5,7 +5,9 @@ var app = express();
 var http = require('http').Server(app);
 var socket_io = require('socket.io')(http);
 var mongoose = require('mongoose');
-var database = new Database(mongoose);
+
+var dbconfig = require('./dbconfig.json');
+var database = new Database(mongoose, dbconfig.server, dbconfig.port, dbconfig.database, dbconfig.options);
 
 /// <reference path="socket.ts"/>
 
