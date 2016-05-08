@@ -9,6 +9,7 @@ var conf = {
 		ts: 'src/ts/**/*.ts',
 		ts_html: 'src/ts/**/*.html',
 		ts_css: 'src/ts/**/*.css',
+		ts_scss: 'src/ts/**/*.scss',
 		js_main: 'src/js/[!_]*.js',
 		js: 'src/js/**/*.js',
 		scss: 'src/scss/**/*.scss',
@@ -48,6 +49,11 @@ var embedStyles = require('./node_modules_own/gulp-angular-embed-styles');
     .pipe(compass(conf.compass));
 });
 
+gulp.task('compile_ts_scss', function() {
+  return gulp.src(conf.output.temp)
+    .pipe(compass({ sass: conf.output.temp, css: conf.output.temp }));
+});
+
 gulp.task('compile_node', function() {
 	var tsResult = gulp.src([conf.sources.typings, conf.sources.node])
 				   .pipe(ts(tsProject))
@@ -66,7 +72,7 @@ gulp.task('compile_ts', function() {
 });
 
 gulp.task('transfer_ts_assets', function() {
-	return gulp.src([conf.sources.ts_html, conf.sources.ts_css])
+	return gulp.src([conf.sources.ts_html, conf.sources.ts_css, conf.sources.ts_scss])
 	.pipe(gulp.dest(conf.output.temp));
 });
 
@@ -94,14 +100,9 @@ gulp.task('compile_js', function() {
 	}));
 });
 
-gulp.task('clean_output', function() {
-	
-	return gulp.src(conf.output.root+'/**/*', {read: false})
-			.pipe(tap(function(file) {
-				if(path.basename(file.path).startsWith('_')){
-					return gulp.src(file.path, {read: false}).pipe(clean());
-				}
-			}));
+gulp.task('clean', function() {
+	return gulp.src(conf.output.temp, {read: false})
+			.pipe(clean());
 
 });			
 
@@ -120,37 +121,36 @@ gulp.task('livereload', function() {
     return livereload.reload();
 });
 
-
 gulp.task('start',[], function () {
 	
 	livereload.listen();
 	
-	watch([conf.sources.ts, conf.sources.ts_html, conf.sources.ts_css], function(vinyl){
+	watch([conf.sources.ts, conf.sources.ts_html, conf.sources.ts_css, , conf.sources.ts_scss], function(vinyl){
 		console.log("ts File Changed: ", vinyl.path);
-		runSequence('compile_ts', 'transfer_ts_assets', 'embed_ts_assets', 'livereload');
+		runSequence('clean', 'transfer_ts_assets', 'compile_ts_scss', 'compile_ts',  'embed_ts_assets', 'livereload');
 	});
 	
 	watch(conf.sources.scss, function(vinyl){
 		console.log("scss File Changed: ", vinyl.path);
-		runSequence('compile_scss', 'livereload');
+		runSequence('clean', 'compile_scss', 'livereload');
 	});
 	
 	watch(conf.sources.html, function(vinyl){
 		console.log("html File Changed: ", vinyl.path);
-		runSequence('transfer_html', 'livereload');
+		runSequence('clean', 'transfer_html', 'livereload');
 	});
 	
 	watch(conf.sources.js, function(vinyl){
 		console.log("js File Changed: ", vinyl.path);
-		runSequence('compile_js', 'livereload');
+		runSequence('clean', 'compile_js', 'livereload');
 	});
 	
 	watch(conf.sources.node, function(vinyl){
 		console.log("node Changed: ", vinyl.path);
-		runSequence('compile_node');
+		runSequence('clean', 'compile_node');
 	});
 	
 	
-	runSequence(['compile_js', 'compile_ts', 'transfer_ts_assets', 'compile_scss', 'transfer_html'], 'embed_ts_assets', 'compile_node', 'nodemon');
-	
+runSequence('clean', ['transfer_ts_assets', 'transfer_html'], ['compile_js', 'compile_ts', 'compile_scss', 'compile_ts_scss'], ['compile_node', 'embed_ts_assets'],  'nodemon');
+	 
 });
