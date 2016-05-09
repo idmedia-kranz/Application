@@ -1,0 +1,13 @@
+.image{
+	background-repeat: no-repeat;
+	background-size: cover;
+	position: absolute;
+	.inventarpoint {
+		position: absolute;
+		border: 1px solid grey;
+		&:hover {
+			background-color: rgba(0,0,0,0.5);
+		}
+	}
+	transition: all 100ms ease-in-out;
+}

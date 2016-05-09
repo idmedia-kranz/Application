@@ -19,9 +19,12 @@ app.get('/editor', function(req, res){
   res.sendFile(__dirname + '/app/editor.html');
 });
 
+app.get('/playground', function(req, res){
+  res.sendFile(__dirname + '/app/playground.html');
+});
 
 app.use('/app', express.static(__dirname + '/app/'));
-app.use('/node_modules', express.static(__dirname + '/node_modules/'));
+app.use('/img', express.static(__dirname + '/app/public/img'));
 
 http.listen(3000, function(){
   console.log('listening on Port:3000');
