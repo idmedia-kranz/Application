@@ -1,3 +1,3 @@
-<playground>
-	<item></item>
-</playgound>
+<div class="playground" (mousemove)="onMousemove($event)">
+	<item *ngFor="let item of items" [attr.id]="item._id" ></item>
+</div>

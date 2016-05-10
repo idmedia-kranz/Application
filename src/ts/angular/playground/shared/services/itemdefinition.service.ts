@@ -50,11 +50,50 @@ export class ItemDefinitionService {
 					new Inventarpoint({x:4,y:6}),
 					new Inventarpoint({x:1,y:1})
 				]
+			},
+			"koffer": {
+				"name": "Koffer",
+				"image": "img/koffer.png",
+				"imageOpen": "img/koffer_open.png",
+				"size": {width:3,height:3},
+				"position": {x:0,y:0},
+				"inventarpoints": [
+					new Inventarpoint({x:0,y:0}),
+					new Inventarpoint({x:1,y:0}),
+					new Inventarpoint({x:2,y:0}),
+					new Inventarpoint({x:0,y:1}),
+					new Inventarpoint({x:1,y:1}),
+					new Inventarpoint({x:2,y:1}),
+					new Inventarpoint({x:0,y:2}),
+					new Inventarpoint({x:1,y:2}),
+					new Inventarpoint({x:2,y:2})
+				]
+			},
+			"pistole": {
+				"name": "Pistole",
+				"image": "img/pistole.png",
+				"imageOpen": "img/pistole_open.png",
+				"size": {width:3,height:2},
+				"position": {x:0,y:0},
+				"inventarpoints": [
+					new Inventarpoint({x:0,y:0}),
+					new Inventarpoint({x:1,y:0}),
+					new Inventarpoint({x:2,y:0}),
+					new Inventarpoint({x:2,y:1})
+				]
+			},
+			"item": {
+				"name": "Unknown Item",
+				"image": "img/item.png",
+				"size": {width:1,height:1},
+				"position": {x:0,y:0},
+				"inventarpoints": []
 			}
 		};//this.http.get('assets/pizza.json').map((res: Response) => res.json());
     }
 	
     getDefinition(_type:string) {
-        return this.definitions[_type];
+		console.log('getDefinition',_type);
+        return this.definitions[_type]||this.definitions["item"];
     }
 }

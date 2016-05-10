@@ -1,3 +1,12 @@
+@keyframes showItem {
+	from {
+		transform: scale(0);
+	}
+	to {
+		transform: scale(1);
+	}
+}
+
 .image{
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -5,14 +14,16 @@
 	.inventarpoint {
 		position: absolute;
 		border: 1px dotted grey;
-		&:hover {
-			background-color: rgba(0,0,0,0.5);
-		}
 	}
 	&.dragged {
-		opacity: 0.5;
+		opacity: 0.75;
 	}
 	&.inventar {
 		transition: all 100ms ease-in-out;
+		animation-name: showItem;
+		animation-duration: 0.5s;
+	}
+	&.original {
+		transition: all 0.5s ease-in-out;
 	}
 }
