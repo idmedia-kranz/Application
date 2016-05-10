@@ -1,3 +1,10 @@
-<div class="image" [style.zIndex]="100-inventarpoints.length" [style.left]="getLeft()" [style.top]="getTop()" [style.height]="getHeight()" [style.width]="getWidth()" [ngStyle]="{'background-image': 'url(' + image + ')'}">
-	<div class="inventarpoint" *ngFor="let point of inventarpoints" [style.left]="point.getLeft()" [style.top]="point.getTop()" [style.width]="point.getWidth()" [style.height]="point.getHeight()"></div>
+<div *ngIf="dragged" class="image original" [style.zIndex]="100-inventarpoints.length" [style.left]="originalPosition.x | worldSize" [style.top]="originalPosition.y | worldSize" [style.height]="size.height | worldSize" [style.width]="size.width | worldSize" [ngStyle]="{'background-image': 'url(' + image + ')'}"></div>
+<div class="image inventar" [style.zIndex]="100-inventarpoints.length" [style.left]="position.x | worldSize" [style.top]="position.y | worldSize" [style.height]="size.height | worldSize" [style.width]="size.width | worldSize" [ngStyle]="{'background-image': dragged?'':open?'url(' +imageOpen + ')':'url(' +image + ')'}">
+	<div *ngIf="dragged">
+		<div class="inventarpoint" *ngFor="let point of inventarpoints" [style.left]="point.position.x | worldSize" [style.top]="point.position.y | worldSize" [style.width]="1 | worldSize" [style.height]="1 | worldSize"></div>
+	</div>
+	<div *ngIf="id==1&&!dragged&&open">
+		<item></item>
+	</div>
 </div>
+<div *ngIf="dragged" class="image dragged" [style.zIndex]="100-inventarpoints.length" [style.left]="draggedPosition.x" [style.top]="draggedPosition.y" [style.height]="size.height | worldSize" [style.width]="size.width | worldSize" [ngStyle]="{'background-image': 'url(' + image + ')'}"></div>

@@ -4,10 +4,15 @@
 	position: absolute;
 	.inventarpoint {
 		position: absolute;
-		border: 1px solid grey;
+		border: 1px dotted grey;
 		&:hover {
 			background-color: rgba(0,0,0,0.5);
 		}
 	}
-	transition: all 100ms ease-in-out;
+	&.dragged {
+		opacity: 0.5;
+	}
+	&.inventar {
+		transition: all 100ms ease-in-out;
+	}
 }

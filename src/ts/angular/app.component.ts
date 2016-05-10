@@ -1,8 +1,9 @@
 import {Component} from 'angular2/core';
+
 @Component({
     selector: 'my-app',
-    templateUrl: 'angular/firstapp.html',
-	styleUrls   :   ['angular/master.css', 'angular/firstapp.css','angular/firstapp2.css','angular/firstapp3.css']
+    templateUrl: 'angular/template.html',
+	styleUrls   :   ['angular/style.css']
 })
 export class AppComponent { 
 	socket = null;
