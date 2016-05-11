@@ -17,7 +17,7 @@
     "socket.io": "latest",
     "systemjs": "0.19.26",
     "zone.js": "0.6.12",
-    "fs": "0.0.2"
+    "fs": "latest"
   },
   "devDependencies": {
     "gulp": "latest",
@@ -35,6 +35,7 @@
     "path": "latest",
     "run-sequence": "latest",
     "typescript": "^1.9.0-dev.20160503",
-    "typings": "^0.8.1"
+    "typings": "^0.8.1",
+	"mkdirp": "latest"
   }
 }
