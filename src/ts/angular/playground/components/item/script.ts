@@ -13,7 +13,6 @@ import {Playground} from '../../app.component';
 
 export class Item {
 
-	static count:number = 0;
 	public id:string;
 	public name:string;
 	public image:string;
@@ -21,7 +20,7 @@ export class Item {
 	public size:any;
 	public position:any;
 	public inventarpoints:Array<Inventarpoint>;
-	static ready:boolean = false;
+	
 	private type:string;
 	private open:boolean = false;
 	private transport:boolean = false;
@@ -34,22 +33,23 @@ export class Item {
 	private socket:any;
 	
 	constructor(private itemDefinitionService: ItemDefinitionService, private elementRef:ElementRef){
-		this.socket = io('http://localhost:3000'); 
-		this.socket.on('updateItem', this.bind(this.updateItem, this));
     }
 	
-	public updateItem(_id, _data){
-		if(this.id == _id){
-			 this.position = _data.position;
-		}
+	public updateData(_data){
+		console.log('updateData', _data);
+		this.position = _data.position;
 	}
 	
 	public ngAfterViewInit() {
 		this.id = this.elementRef.nativeElement.getAttribute('id');
-		this.socket.emit('getItem', this.id, this.bind(this.receiveItem, this));
+		this.socket = io('/'+this.id); 
+		console.log('/'+this.id);
+		this.socket.on('loadItem', this.bind(this.loadItem, this));
+		this.socket.on('updateData', this.bind(this.updateData, this));
 	}
 	
-	private receiveItem(_item){
+	private loadItem(_item){
+		console.log('loadItem', _item);
 		this.type = _item.type;
 		this.definition = this.itemDefinitionService.getDefinition(this.type);
 		this.name = this.definition.name;
@@ -58,11 +58,6 @@ export class Item {
 		this.size = this.definition.size;
 		this.inventarpoints = this.definition.inventarpoints;
 		this.position = _item.position;
-	}
-	
-	private savePosition(){
-		console.log('saveItem', {position: this.position});
-		this.socket.emit('saveItem', this.id, {position: this.position});
 	}
 	
 	private onMouseenter(event) { 
@@ -84,12 +79,11 @@ export class Item {
 		} else {
 			var _this = this;
 			this.transport = true;
-			this.savePosition();
+			this.socket.emit('updateData', {position: this.position});
 			setTimeout(function(){
 				_this.dragged = false;
 				_this.transport = false;
 			}, 500);
-			
 		}
 		event.stopPropagation();
 	}

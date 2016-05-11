@@ -19,7 +19,7 @@ export class Playground {
 	private items:Array<any>;
 	
     constructor(){
-		this.socket = io('http://localhost:3000'); 
+		this.socket = io('/playground'); 
 		this.socket.emit('getItems', this.bind(this.receiveItems, this));
     }
 	
