@@ -11,7 +11,7 @@
 	</div>
 	<div id="navbar" class="collapse navbar-collapse">
 	  <ul class="nav navbar-nav">
-		<li class="active"><a href="#">Neues Objekt erstellen</a></li>
+		<li class="active"><a (click)="newElement()" href="javascript:;">Neues Objekt erstellen</a></li>
 	  </ul>
 	</div><!--/.nav-collapse -->
   </div>
@@ -22,7 +22,34 @@
 	<h1>Bootstrap starter template</h1>
 	<p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
   </div>
-  
+  	<div class="tree">
+		<ul>
+			<li>
+				<span><i class="glyphicon glyphicon-pencil"></i> Objects</span>
+				<ul>
+					<li *ngFor="let folder of hierarchie" *ngIf="hierarchie&&folder">
+						<span class="badge badge-success"><i class="glyphicon glyphicon-pencil"></i> {{folder.name}}</span>
+						<ul ng-if="folder.children">
+							<li *ngFor="let folder2 of folder.children">
+								<span class="badge badge-success"><i class="glyphicon glyphicon-pencil"></i> {{folder2.name}}</span>
+								<ul ng-if="folder2.children">
+									<li *ngFor="let folder3 of folder2.children" >
+										<span class="badge badge-success"><i class="glyphicon glyphicon-pencil"></i> {{folder3.name}}</span>
+										<ul ng-if="folder3.children">
+											<li *ngFor="let folder4 of folder3.children" >
+												<span class="badge badge-success"><i class="glyphicon glyphicon-pencil"></i> {{folder4.name}}</span>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			<li>
+		</ul>
+	</div>
+  <!--
 	<div class="tree">
 		<ul>
 			<li>
@@ -150,5 +177,6 @@
 			</li>
 		</ul>
 	</div>
+	-->
 
 </div><!-- /.container -->
