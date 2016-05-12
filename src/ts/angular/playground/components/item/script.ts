@@ -1,19 +1,19 @@
 import {Component, Attribute, ElementRef} from 'angular2/core';
-import {ObjectDefinitionService, WorldSizePipe} from '../../shared/index';
-import {Playground} from '../../app.component';
+import {ItemDefinitionService, WorldSizePipe} from '../../shared/index';
+import {Playground} from '../../playground.component';
 
 const bind = (f, context, ...x) => (...y) => f.apply(context, x.concat(y));
 
 @Component({
-    selector: 'object',
-	providers: [ObjectDefinitionService],
+    selector: 'item',
+	providers: [ItemDefinitionService],
 	pipes: [WorldSizePipe],
-    templateUrl: 'angular/playground/components/object/template.html',
-	styleUrls: ['angular/playground/components/object/style.css'],
-	directives: [Object]
+    templateUrl: 'angular/playground/components/item/template.html',
+	styleUrls: ['angular/playground/components/item/style.css'],
+	directives: [Item]
 })
 
-export class Object {
+export class Item {
 
 	public id:string;
 	public name:string;
@@ -34,34 +34,35 @@ export class Object {
 	private definition:any;
 	private socket:any;
 	
-	constructor(private objectDefinitionService: ObjectDefinitionService, private elementRef:ElementRef){
+	constructor(private itemDefinitionService: ItemDefinitionService, private elementRef:ElementRef){
     }
 	
-	public updateData(_data){
-		console.log('updateData', _data);
+	public updateItem(_data){
+		console.log('updateItem', _data);
 		for (var attr in _data) {
 			this[attr] = _data[attr];
 		}
 	}
 	
 	public ngAfterViewInit() {
-		this.id = this.elementRef.nativeElement.getAttribute('id');
-		this.socket = io('/'+this.id); 
-		console.log('/'+this.id);
-		this.socket.on('loadObject', bind(this.loadObject, this));
-		this.socket.on('updateData', bind(this.updateData, this));
+		if(this.id = this.elementRef.nativeElement.getAttribute('id')){
+			this.socket = io('/'+this.id); 
+			console.log('/'+this.id);
+			this.socket.on('loadItem', bind(this.loadItem, this));
+			this.socket.on('updateItem', bind(this.updateItem, this));
+		}
 	}
 	
-	private loadObject(_object){
-		console.log('loadObject', _object);
-		this.type = _object.type;
-		this.definition = this.objectDefinitionService.getDefinition(this.type);
+	private loadItem(_item){
+		console.log('loadItem', _item);
+		this.type = _item.type;
+		this.definition = this.itemDefinitionService.getDefinition(this.type);
 		this.name = this.definition.name;
 		this.image = this.definition.image;
 		this.imageOpen = this.definition.imageOpen;
 		this.size = this.definition.size;
 		this.inventarpoints = this.definition.inventarpoints;
-		this.position = _object.position;
+		this.position = _item.position || {x: 0, y: 0};
 	}
 	
 	private onMouseenter(event) { 
@@ -83,7 +84,7 @@ export class Object {
 		} else {
 			var _this = this;
 			this.transport = true;
-			this.socket.emit('updateData', {position: this.position});
+			this.socket.emit('updateItem', {position: this.position});
 			setTimeout(function(){
 				_this.dragged = false;
 				_this.transport = false;
