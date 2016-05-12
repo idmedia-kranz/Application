@@ -1,3 +1,7 @@
 <div class="playground" (mousemove)="onMousemove($event)">
-	<item *ngFor="let item of items" [attr.id]="item._id" ></item>
+
+	<objects *ngFor="let object of objects | keyValuePair">
+		<object *ngFor="let id of object.val" [attr.id]="id" [attr.class]="object.key"></object>
+	</objects>
+
 </div>

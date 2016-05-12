@@ -1,17 +1,19 @@
 import {Component, Attribute, ElementRef} from 'angular2/core';
-import {ItemDefinitionService, WorldSizePipe} from '../../shared/index';
+import {ObjectDefinitionService, WorldSizePipe} from '../../shared/index';
 import {Playground} from '../../app.component';
 
+const bind = (f, context, ...x) => (...y) => f.apply(context, x.concat(y));
+
 @Component({
-    selector: 'item',
-	providers: [ItemDefinitionService],
+    selector: 'object',
+	providers: [ObjectDefinitionService],
 	pipes: [WorldSizePipe],
-    templateUrl: 'angular/playground/components/item/template.html',
-	styleUrls: ['angular/playground/components/item/style.css'],
-	directives: [Item]
+    templateUrl: 'angular/playground/components/object/template.html',
+	styleUrls: ['angular/playground/components/object/style.css'],
+	directives: [Object]
 })
 
-export class Item {
+export class Object {
 
 	public id:string;
 	public name:string;
@@ -32,32 +34,34 @@ export class Item {
 	private definition:any;
 	private socket:any;
 	
-	constructor(private itemDefinitionService: ItemDefinitionService, private elementRef:ElementRef){
+	constructor(private objectDefinitionService: ObjectDefinitionService, private elementRef:ElementRef){
     }
 	
 	public updateData(_data){
 		console.log('updateData', _data);
-		this.position = _data.position;
+		for (var attr in _data) {
+			this[attr] = _data[attr];
+		}
 	}
 	
 	public ngAfterViewInit() {
 		this.id = this.elementRef.nativeElement.getAttribute('id');
 		this.socket = io('/'+this.id); 
 		console.log('/'+this.id);
-		this.socket.on('loadItem', this.bind(this.loadItem, this));
-		this.socket.on('updateData', this.bind(this.updateData, this));
+		this.socket.on('loadObject', bind(this.loadObject, this));
+		this.socket.on('updateData', bind(this.updateData, this));
 	}
 	
-	private loadItem(_item){
-		console.log('loadItem', _item);
-		this.type = _item.type;
-		this.definition = this.itemDefinitionService.getDefinition(this.type);
+	private loadObject(_object){
+		console.log('loadObject', _object);
+		this.type = _object.type;
+		this.definition = this.objectDefinitionService.getDefinition(this.type);
 		this.name = this.definition.name;
 		this.image = this.definition.image;
 		this.imageOpen = this.definition.imageOpen;
 		this.size = this.definition.size;
 		this.inventarpoints = this.definition.inventarpoints;
-		this.position = _item.position;
+		this.position = _object.position;
 	}
 	
 	private onMouseenter(event) { 
@@ -75,7 +79,7 @@ export class Item {
 			this.originalPosition = this.position;
 			this.dragStartPosition = { x: event.clientX, y: event.clientY };
 			this.dragged = true;
-			Playground.mouseMoveEvent = this.bind(this.onMousemove, this);
+			Playground.mouseMoveEvent = bind(this.onMousemove, this);
 		} else {
 			var _this = this;
 			this.transport = true;
@@ -103,5 +107,4 @@ export class Item {
 		};
 	}
 	
-	private bind = (f, context, ...x) => (...y) => f.apply(context, x.concat(y));
 }

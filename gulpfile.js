@@ -125,7 +125,7 @@ gulp.task('start',[], function () {
 	
 	livereload.listen();
 	
-	watch([conf.sources.ts, conf.sources.ts_html, conf.sources.ts_css, conf.sources.ts_scss], function(vinyl){
+	watch('src/ts/**/*', function(vinyl){
 		console.log("ts File Changed: ", vinyl.path);
 		runSequence('clean', 'transfer_ts_assets', 'compile_ts_scss', 'compile_ts',  'embed_ts_assets', 'livereload');
 	});

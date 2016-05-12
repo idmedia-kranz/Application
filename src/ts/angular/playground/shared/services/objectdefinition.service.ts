@@ -4,7 +4,7 @@ import {Injectable} from 'angular2/core';
 //import 'rxjs/add/operator/map';
 
 @Injectable()
-export class ItemDefinitionService {
+export class ObjectDefinitionService {
 
 	private definitions:any;
 		
@@ -82,9 +82,9 @@ export class ItemDefinitionService {
 					new Inventarpoint({x:2,y:1})
 				]
 			},
-			"item": {
-				"name": "Unknown Item",
-				"image": "img/item.png",
+			"object": {
+				"name": "Unknown Object",
+				"image": "img/object.png",
 				"size": {width:1,height:1},
 				"position": {x:0,y:0},
 				"inventarpoints": []
@@ -94,6 +94,6 @@ export class ItemDefinitionService {
 	
     getDefinition(_type:string) {
 		console.log('getDefinition',_type);
-        return this.definitions[_type]||this.definitions["item"];
+        return this.definitions[_type]||this.definitions["object"];
     }
 }

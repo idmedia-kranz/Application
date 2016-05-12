@@ -1,4 +1,4 @@
-@keyframes showItem {
+@keyframes showObject {
 	from {
 		transform: scale(0);
 	}
@@ -20,7 +20,7 @@
 	}
 	&.inventar {
 		transition: all 100ms ease-in-out;
-		animation-name: showItem;
+		animation-name: showObject;
 		animation-duration: 0.5s;
 	}
 	&.original {

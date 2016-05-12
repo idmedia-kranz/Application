@@ -1,4 +1,5 @@
 /// <reference path="database.ts"/>
+const bind = (f, context, ...x) => (...y) => f.apply(context, x.concat(y));
 
 var express = require('express');
 var app = express();
@@ -6,6 +7,7 @@ var http = require('http').Server(app);
 var socket_io = require('socket.io')(http);
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var extend = require('extend');
 
 var dbconfig = require('./dbconfig.json');
 var database = new Database(mongoose, dbconfig.server, dbconfig.port, dbconfig.database, dbconfig.options);

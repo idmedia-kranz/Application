@@ -1,4 +1,4 @@
-<div *ngIf="type">
+<div *ngIf="definition">
 	<div *ngIf="dragged" class="image original" [style.zIndex]="100-inventarpoints.length" [style.left]="(transport?position.x:originalPosition.x) | worldSize" [style.top]="(transport?position.y:originalPosition.y) | worldSize" [style.height]="size.height | worldSize" [style.width]="size.width | worldSize" [ngStyle]="{'background-image': 'url(' + image + ')'}"></div>
 	<div (click)="onClick($event)" (mouseenter)="onMouseenter($event)" (mouseleave)="onMouseleave($event)"  class="image inventar" [style.zIndex]="(100-inventarpoints.length)+(open?100:0)" [style.left]="position.x | worldSize" [style.top]="position.y | worldSize" [style.height]="size.height | worldSize" [style.width]="size.width | worldSize" [ngStyle]="{'background-image': dragged?'':open&&imageOpen?'url(' +imageOpen + ')':'url(' +image + ')'}">
 		<div *ngIf="dragged">

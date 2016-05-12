@@ -1,14 +1,18 @@
 /// <reference path="shared/interfaces/position.ts"/>
 /// <reference path="shared/classes/inventarpoint.ts"/>
 
+const bind = (f, context, ...x) => (...y) => f.apply(context, x.concat(y));
+
 import {Component} from 'angular2/core';
-import {Item} from './components/item/script';
+import {Object} from './components/object/script';
+import {PropertiesPipe} from './shared/index';
 
 @Component({
     selector: 'playground',
     templateUrl: 'angular/playground/template.html',
 	styleUrls   :   ['angular/playground/style.css'],
-	directives: [Item]
+	directives: [Object],
+	pipes: [PropertiesPipe]
 })
 export class Playground {
 	
@@ -16,16 +20,16 @@ export class Playground {
 	static mouseMoveEvent:any;
 	
 	private socket:any;
-	private items:Array<any>;
+	private objects:any = {};
 	
     constructor(){
 		this.socket = io('/playground'); 
-		this.socket.emit('getItems', this.bind(this.receiveItems, this));
+		this.socket.emit('getObjects', bind(this.receiveObjects, this));
     }
 	
-	private receiveItems(_items){
-		console.log(_items);
-		this.items = _items;
+	private receiveObjects(_objects){
+		console.log(_objects);
+		this.objects = _objects;
 	}
 
 	private onMousemove(event) { 
@@ -35,5 +39,4 @@ export class Playground {
 		}
 	}
 	
-	private bind = (f, context, ...x) => (...y) => f.apply(context, x.concat(y));
 }

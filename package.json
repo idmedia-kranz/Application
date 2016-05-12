@@ -17,7 +17,8 @@
     "socket.io": "latest",
     "systemjs": "0.19.26",
     "zone.js": "0.6.12",
-    "fs": "latest"
+    "fs": "latest",
+	"extend": "latest"
   },
   "devDependencies": {
     "gulp": "latest",
