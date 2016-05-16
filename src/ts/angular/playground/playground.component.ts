@@ -1,44 +1,40 @@
 /// <reference path="shared/interfaces/position.ts"/>
-/// <reference path="shared/classes/inventarpoint.ts"/>
 
 const bind = (f, context, ...x) => (...y) => f.apply(context, x.concat(y));
 
-import {Component} from 'angular2/core';
-import {Item} from './components/item/script';
-import {Login} from './components/login/script';
+import {Component, DynamicComponentLoader, Injector, ViewContainerRef} from 'angular2/core';
+import {Login, Inventar} from './components/index';
 import {PropertiesPipe} from './shared/index';
 
 @Component({
     selector: 'playground',
     templateUrl: 'angular/playground/template.html',
 	styleUrls   :   ['angular/playground/style.css'],
-	directives: [Item, Login],
+	directives: [Login, Inventar],
 	pipes: [PropertiesPipe]
 })
 export class Playground {
+	
+	private inventarId:string;
 	
 	static mousePosition:any;
 	static mouseMoveEvent:any;
 	
 	private socket:any;
-	private objects:any = {};
 	private loaded:boolean;
 	
-    constructor(){
+    constructor(){ //private dcl: DynamicComponentLoader, private viewContainerRef: ViewContainerRef, private injector: Injector
 		this.loaded = false;
 		this.socket = io('/playground'); 
-		this.socket.emit('getObjects', bind(this.receiveObjects, this));
+		this.socket.emit('getInventar', bind(this.receiveInventar, this));
     }
 	
-	private receiveObjects(_objects){
-		console.log(_objects);
-		this.objects = _objects;
+	private receiveInventar(_id){
+		this.inventarId = _id;
 		this.loaded = true;
 	}
 
 	private onMousemove(event) { 
-		if(!this.loaded)
-			this.socket.emit('getObjects', bind(this.receiveObjects, this));
 		Playground.mousePosition = { x: event.clientX, y: event.clientY };
 		if(Playground.mouseMoveEvent){
 			Playground.mouseMoveEvent({ x: event.clientX, y: event.clientY });

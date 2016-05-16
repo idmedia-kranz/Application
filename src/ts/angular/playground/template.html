@@ -1,9 +1,4 @@
 <login></login>
 <div class="playground" (mousemove)="onMousemove($event)">
-
-<objects *ngFor="let object of objects | keyValuePair">
-	<item *ngFor="let id of object.val" *ngIf="object.key=='Item'||object.key=='Player'" [attr.id]="id"></item>
-</objects>
-
-
+	<inventar *ngIf="loaded" [attr.id]="inventarId"></inventar>
 </div>

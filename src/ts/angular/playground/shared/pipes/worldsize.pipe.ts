@@ -1,8 +1,9 @@
 import {Pipe, PipeTransform} from 'angular2/core';
 
 @Pipe({name: 'worldSize'})
-export class WorldSizePipe implements PipeTransform {
+export class WorldSize implements PipeTransform {
+	public static grid = 50;
     transform(number:number) : any {
-        return Math.round(number*Inventarpoint.size.width);
+        return Math.round(number*WorldSize.grid);
     }
 }

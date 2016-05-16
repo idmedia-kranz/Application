@@ -1,0 +1,29 @@
+@keyframes showObject {
+	from {
+		transform: scale(0);
+	}
+	to {
+		transform: scale(1);
+	}
+}
+
+.image{
+	background-repeat: no-repeat;
+	background-size: cover;
+	position: absolute;
+	.inventarpoint {
+		position: absolute;
+		border: 1px dotted grey;
+	}
+	&.dragged {
+		opacity: 0.75;
+	}
+	&.inventar {
+		transition: all 100ms ease-in-out;
+		animation-name: showObject;
+		animation-duration: 0.5s;
+	}
+	&.original {
+		transition: all 0.5s ease-in-out;
+	}
+}

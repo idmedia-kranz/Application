@@ -1,0 +1,12 @@
+<div *ngIf="definition">
+	<div *ngIf="dragged" class="image original" [style.zIndex]="100-inventarpoints.length" [style.left]="(transport?position.x:originalPosition.x) | worldSize" [style.top]="(transport?position.y:originalPosition.y) | worldSize" [style.height]="size.height | worldSize" [style.width]="size.width | worldSize" [ngStyle]="{'background-image': 'url(' + image + ')'}"></div>
+	<div (click)="onClick($event)" (mouseenter)="onMouseenter($event)" (mouseleave)="onMouseleave($event)"  class="image inventar" [style.zIndex]="(100-inventarpoints.length)+(open?100:0)" [style.left]="position.x | worldSize" [style.top]="position.y | worldSize" [style.height]="size.height | worldSize" [style.width]="size.width | worldSize" [ngStyle]="{'background-image': dragged?'':open&&imageOpen?'url(' +imageOpen + ')':'url(' +image + ')'}">
+		<div *ngIf="dragged">
+			<div class="inventarpoint" *ngFor="let point of inventarpoints" [style.border-color]="point.collision&&!droppable?'red':'green'" [style.left]="point.x | worldSize" [style.top]="point.y | worldSize" [style.width]="1 | worldSize" [style.height]="1 | worldSize"></div>
+		</div>
+		<objects ng-if="open" *ngFor="let object of children | keyValuePair">
+			<item *ngFor="let id of object.val" *ngIf="object.key=='Item'" [attr.id]="id"></item>
+		</objects>
+	</div>
+	<div *ngIf="dragged&&!transport" (click)="onClick($event)"  class="image dragged" [style.zIndex]="200" [style.left]="draggedPosition.x" [style.top]="draggedPosition.y" [style.height]="size.height | worldSize" [style.width]="size.width | worldSize" [ngStyle]="{'background-image': 'url(' + image + ')'}"></div>
+</div>

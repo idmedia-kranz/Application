@@ -9,91 +9,16 @@ export class ItemDefinitionService {
 	private definitions:any;
 		
 	constructor() { //private http: Http
-		this.definitions = {
-			"rucksack": {
-				"name": "Rucksack",
-				"image": "img/rucksack.png",
-				"imageOpen": "img/rucksack_open.png",
-				"size": {width:6,height:7},
-				"position": {x:0,y:0},
-				"inventarpoints": [
-					new Inventarpoint({x:2,y:0}),
-					new Inventarpoint({x:3,y:0}),
-					new Inventarpoint({x:4,y:0}),
-					new Inventarpoint({x:4,y:1}),
-					new Inventarpoint({x:3,y:1}),
-					new Inventarpoint({x:3,y:2}),
-					new Inventarpoint({x:4,y:2}),
-					new Inventarpoint({x:4,y:3}),
-					new Inventarpoint({x:3,y:3}),
-					new Inventarpoint({x:5,y:3}),
-					new Inventarpoint({x:5,y:2}),
-					new Inventarpoint({x:0,y:2}),
-					new Inventarpoint({x:0,y:3}),
-					new Inventarpoint({x:2,y:1}),
-					new Inventarpoint({x:1,y:2}),
-					new Inventarpoint({x:2,y:2}),
-					new Inventarpoint({x:1,y:3}),
-					new Inventarpoint({x:2,y:3}),
-					new Inventarpoint({x:0,y:4}),
-					new Inventarpoint({x:1,y:4}),
-					new Inventarpoint({x:2,y:4}),
-					new Inventarpoint({x:3,y:4}),
-					new Inventarpoint({x:4,y:4}),
-					new Inventarpoint({x:5,y:4}),
-					new Inventarpoint({x:1,y:5}),
-					new Inventarpoint({x:2,y:5}),
-					new Inventarpoint({x:3,y:5}),
-					new Inventarpoint({x:4,y:5}),
-					new Inventarpoint({x:2,y:6}),
-					new Inventarpoint({x:3,y:6}),
-					new Inventarpoint({x:4,y:6}),
-					new Inventarpoint({x:1,y:1})
-				]
-			},
-			"koffer": {
-				"name": "Koffer",
-				"image": "img/koffer.png",
-				"imageOpen": "img/koffer_open.png",
-				"size": {width:3,height:3},
-				"position": {x:0,y:0},
-				"inventarpoints": [
-					new Inventarpoint({x:0,y:0}),
-					new Inventarpoint({x:1,y:0}),
-					new Inventarpoint({x:2,y:0}),
-					new Inventarpoint({x:0,y:1}),
-					new Inventarpoint({x:1,y:1}),
-					new Inventarpoint({x:2,y:1}),
-					new Inventarpoint({x:0,y:2}),
-					new Inventarpoint({x:1,y:2}),
-					new Inventarpoint({x:2,y:2})
-				]
-			},
-			"pistole": {
-				"name": "Pistole",
-				"image": "img/pistole.png",
-				"imageOpen": "img/pistole_open.png",
-				"size": {width:3,height:2},
-				"position": {x:0,y:0},
-				"inventarpoints": [
-					new Inventarpoint({x:0,y:0}),
-					new Inventarpoint({x:1,y:0}),
-					new Inventarpoint({x:2,y:0}),
-					new Inventarpoint({x:2,y:1})
-				]
-			},
-			"item": {
-				"name": "Unknown Item",
-				"image": "img/item.png",
-				"size": {width:1,height:1},
-				"position": {x:0,y:0},
-				"inventarpoints": []
-			}
-		};//this.http.get('assets/pizza.json').map((res: Response) => res.json());
+		this.definitions = {};//this.http.get('assets/pizza.json').map((res: Response) => res.json());
     }
 	
+	addDefinition(_type:string, _definition:any){
+		console.log('add definition ', _type);
+		this.definitions[_type] = _definition;
+	}
+	
     getDefinition(_type:string) {
-		console.log('getDefinition',_type);
+		console.log('getDefinition', _type);
         return this.definitions[_type]||this.definitions["item"];
     }
 }
