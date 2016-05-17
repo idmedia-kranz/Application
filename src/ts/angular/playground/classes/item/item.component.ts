@@ -1,5 +1,5 @@
 import {Component, forwardRef} from 'angular2/core';
-import {ItemDefinitionService, WorldSize, PropertiesPipe} from '../../shared/index';
+import {WorldSize, PropertiesPipe} from '../../shared/index';
 import {Playground} from '../../playground.component';
 import {Inventar} from '../../components/index';
 
@@ -7,7 +7,6 @@ const bind = (f, context, ...x) => (...y) => f.apply(context, x.concat(y));
 
 @Component({
     selector: 'item',
-	providers: [ItemDefinitionService],
 	pipes: [WorldSize, PropertiesPipe],
     templateUrl: 'angular/playground/classes/item/template.html',
 	styleUrls: ['angular/playground/classes/item/style.css'],

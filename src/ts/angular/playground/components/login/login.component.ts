@@ -1,4 +1,5 @@
 import {Component, Attribute, ElementRef} from 'angular2/core';
+import {Session} from '../../shared/index';
 
 const bind = (f, context, ...x) => (...y) => f.apply(context, x.concat(y));
 
@@ -12,18 +13,16 @@ export class Login {
 	
 	private username:string;
 	private passwort:string;
-	private socket:any;
 	private logged:boolean;
 	private error:boolean;
 	
-	constructor(){
+	constructor(private session: Session){
 		this.logged = false;
 		this.error = false;
-		this.socket = io('/login');
 	}
 	
 	public login(){
-		this.socket.emit('login', this.username, this.passwort, bind(function(success){
+		this.session.emit('login', this.username, this.passwort, bind(function(success){
 				this.logged = success;
 				this.error = !this.logged;
 		}, this));
