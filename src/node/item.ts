@@ -13,8 +13,7 @@ class Item extends GameObject {
 	
 	constructor(_id:string){
 		super(_id);
-		this.io = socket_io.of('/'+this.id);
-		this.io.on('connection', bind(this.clientConnect, this));
+		session.on('load', _id, bind(this.clientConnect, this));
 	}
 	
 	public static getSchemaData();

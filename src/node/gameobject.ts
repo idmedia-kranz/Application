@@ -1,7 +1,7 @@
 class GameObject {
 	
 	public static name;
-	public static collection:any;
+	public static instances:any;
 	public static schema:any;
 	public static model:any;
 	public static saveInterval:any;
@@ -57,7 +57,7 @@ class GameObject {
 			  next();
 			});
 			objectclass.model = mongoose.model(objectclass.name, objectclass.schema);
-			objectclass.collection = {};
+			objectclass.instances = {};
 		}
 		GameObject.initSaveInterval();
 	}
@@ -66,9 +66,9 @@ class GameObject {
 		GameObject.saveInterval = setInterval(function(){
 			for(let classname in GameObject.classes){
 				var objectclass = GameObject.classes[classname];
-				for(var id in objectclass.collection) {
-					if(objectclass.collection[id].data){
-						objectclass.collection[id].data.save();
+				for(var id in objectclass.instances) {
+					if(objectclass.instances[id].data){
+						objectclass.instances[id].data.save();
 					}
 				}
 			}
@@ -77,22 +77,21 @@ class GameObject {
 
 	public static loadObjects(_ids){
 		for(var id of _ids) {
-			this.collection = this.collection || {};
-			if(!this.collection[id]){
-				this.collection[id] = new this(id);
-				this.collection[id].class = this;
+			this.instances = this.instances || {};
+			if(!this.instances[id]){
+				this.instances[id] = new this(id);
+				this.instances[id].class = this;
 			}
 		}
-		
 	}
 
 	public loadObject(_callback){
-		if(this.class.collection && this.class.collection[this.id].data){
-			_callback(this.class.collection[this.id].data);
+		if(this.class.instances && this.class.instances[this.id].data){
+			_callback(this.class.instances[this.id].data);
 		} else {
 			this.class.model.findById(this.id, bind(function(err, _object) {
 				if (err) throw err;
-				this.class.collection[this.id].data = _object;
+				this.class.instances[this.id].data = _object;
 				_callback(_object);
 			}, this));
 		}

@@ -13,6 +13,7 @@ var dbconfig = require('./dbconfig.json');
 var database = new Database(mongoose, dbconfig.server, dbconfig.port, dbconfig.database, dbconfig.options);
 
 /// <reference path="socket.ts"/>
+/// <reference path="session.ts"/>
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/app/index.html');

@@ -1,5 +1,5 @@
-import {Component, forwardRef} from 'angular2/core';
-import {WorldSize, PropertiesPipe} from '../../shared/index';
+import {Component, forwardRef, Inject} from 'angular2/core';
+import {Session, WorldSize, PropertiesPipe} from '../../shared/index';
 import {Playground} from '../../playground.component';
 import {Inventar} from '../../components/index';
 
@@ -33,12 +33,11 @@ export class Item {
 	private originalPosition:any;
 	private draggedPosition:any = {x:0,y:0};
 	private definition:any;
-	private socket:any;
 	private children:any;
 	private inventarId:string;
 	
 	public static definitions:any = {};
-	public static collection = {};
+	public static instances = {};
 	
 	public inventar = {
 		"add": function(_object){
@@ -46,24 +45,17 @@ export class Item {
 		}
 	};
 	
-	constructor(){ //, @Host(Playground) playground: Playground
-    }
-	
-	public updateItem(_data){
-		console.log('updateItem', _data);
-		for (var attr in _data) {
-			this[attr] = _data[attr];
-		}
+	constructor(private session:Session){
 	}
 	
 	public load(_id){
 		console.log('load', _id);
 		if(this.id = _id){
-			Item.collection[this.id] = this;
-			this.socket = io('/'+this.id); 
-			console.log('/'+this.id);
-			this.socket.on('loadItem', bind(this.loadItem, this));
-			this.socket.on('updateItem', bind(this.updateItem, this));
+			Item.instances[this.id] = this;
+			this.session.socket.emit('load', this.id);
+			console.log('emit('+this.id+'_load)');
+			//this.socket.on(Session.load(this.id), bind(this.loadItem, this));
+			//this.socket.on(Session.update(this.id), bind(this.updateItem, this));
 		}
 	}
 	
@@ -83,6 +75,14 @@ export class Item {
 		this.inventarId = _item.inventarId;
 		this.children = {};
 	}
+
+	public updateItem(_data){
+		console.log('updateItem', _data);
+		for (var attr in _data) {
+			this[attr] = _data[attr];
+		}
+	}
+	
 	
 	private onMouseenter(event) { 
 		if(!this.transport){

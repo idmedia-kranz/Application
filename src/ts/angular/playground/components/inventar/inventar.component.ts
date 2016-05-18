@@ -2,6 +2,7 @@ const bind = (f, context, ...x) => (...y) => f.apply(context, x.concat(y));
 
 import {Component, DynamicComponentLoader, ViewContainerRef, ElementRef} from 'angular2/core';
 import * as components from '../../classes/index';
+import {Session} from '../../shared/index';
 
 @Component({
     selector: 'inventar',
@@ -12,7 +13,7 @@ export class Inventar {
 	
 	private data:any = {};
 	private id:string;
-	private collection = {};
+	private instances = {};
 	
     constructor(private dcl: DynamicComponentLoader, private viewContainerRef: ViewContainerRef, private elementRef: ElementRef){
     }
@@ -32,7 +33,7 @@ export class Inventar {
 		.then((ref:ComponentRef<Type>) => {    
 			ref.instance.load(_id);
 			ref.instance.parentInventar = this;
-			this.collection[_id] = ref;
+			this.instances[_id] = ref;
 		});
 	}
 	
@@ -44,9 +45,9 @@ export class Inventar {
 	}
 	
 	public removeObject(_id){
-		console.log(this.collection[_id]);
-		this.collection[_id].destroy();
-		delete this.collection[_id];
+		console.log(this.instances[_id]);
+		this.instances[_id].destroy();
+		delete this.instances[_id];
 	}
 	
 	public updateInventar(){
@@ -54,7 +55,7 @@ export class Inventar {
 	}	
 	
 	private transferObject(_id, _inventar){
-		this.collection[_id].instance.inventar.add(this);
+		this.instances[_id].instance.inventar.add(this);
 		this.removeObject(_id);
 	}
 	
@@ -68,11 +69,11 @@ export class Inventar {
 		_object.newParentInventar = null;
 		_object.droppable = true;
 		
-		for(id in this.collection){
+		for(id in this.instances){
 			if(id != _object.id)
-			for(point of this.collection[id].instance.inventarpoints){
-				x = this.collection[id].instance.position.x+point.x;
-				y = this.collection[id].instance.position.y+point.y;
+			for(point of this.instances[id].instance.inventarpoints){
+				x = this.instances[id].instance.position.x+point.x;
+				y = this.instances[id].instance.position.y+point.y;
 				points[x] = points[x] || [];
 				points[x][y] = id;				
 			}

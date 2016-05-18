@@ -22,7 +22,7 @@ export class Login {
 	}
 	
 	public login(){
-		this.session.emit('login', this.username, this.passwort, bind(function(success){
+		this.session.socket.emit('authenticate', (this.username||'testuser'), this.passwort, bind(function(success){
 				this.logged = success;
 				this.error = !this.logged;
 		}, this));
