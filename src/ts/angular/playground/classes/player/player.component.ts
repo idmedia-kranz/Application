@@ -1,8 +1,8 @@
 import {Component} from 'angular2/core';
-import {ItemDefinitionService, WorldSize, PropertiesPipe} from '../../shared/index';
+import {ItemDefinitionService, WorldSize, PropertiesPipe, Session} from '../../shared/index';
 import {Playground} from '../../playground.component';
-import * as components from '../index';
-import {Item} from '../index';
+import {Item, Player} from '../index';
+import {Session, WorldSize, PropertiesPipe} from '../../shared/index';
 
 const bind = (f, context, ...x) => (...y) => f.apply(context, x.concat(y));
 
@@ -16,7 +16,7 @@ const bind = (f, context, ...x) => (...y) => f.apply(context, x.concat(y));
 
 export class Player extends Item{
 
-	constructor(){ //, @Host(Playground) playground: Playground
+	constructor(){
 		super();
     }
 	

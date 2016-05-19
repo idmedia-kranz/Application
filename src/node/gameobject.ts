@@ -20,15 +20,21 @@ class GameObject {
 		this.id = _id;
 	}
 	
-	
 	public static getSchemaData(){return {
 	  created_at: Date,
 	  updated_at: Date
 	}}
 	
 	public on(_eventname, _callback){
-		console.log(_eventname, this[_eventname]);
-		this[_eventname].on(bind(_callback, this));
+		if(this[_eventname]){
+			this[_eventname].on(bind(_callback, this));
+		} else {
+			session.on(_eventname, this.id, bind(_callback, this));
+		}
+	}
+	
+	public emit(_action, _data, _callback){
+		session.io.emit(_action, this.id, _data, bind(_callback, this));
 	}
 	
 	public static register(_parent=GameObject){
@@ -57,19 +63,16 @@ class GameObject {
 			  next();
 			});
 			objectclass.model = mongoose.model(objectclass.name, objectclass.schema);
-			objectclass.instances = {};
+			GameObject.instances = {};
 		}
 		GameObject.initSaveInterval();
 	}
 	
 	public static initSaveInterval(){
 		GameObject.saveInterval = setInterval(function(){
-			for(let classname in GameObject.classes){
-				var objectclass = GameObject.classes[classname];
-				for(var id in objectclass.instances) {
-					if(objectclass.instances[id].data){
-						objectclass.instances[id].data.save();
-					}
+			for(var id in GameObject.instances) {
+				if(GameObject.instances[id].data){
+					GameObject.instances[id].data.save();
 				}
 			}
 		}, GameObject.saveIntervalTime);
@@ -77,21 +80,21 @@ class GameObject {
 
 	public static loadObjects(_ids){
 		for(var id of _ids) {
-			this.instances = this.instances || {};
-			if(!this.instances[id]){
-				this.instances[id] = new this(id);
-				this.instances[id].class = this;
+			GameObject.instances = GameObject.instances || {};
+			if(!GameObject.instances[id]){
+				GameObject.instances[id] = new this(id);
+				GameObject.instances[id].class = this;
 			}
 		}
 	}
 
 	public loadObject(_callback){
-		if(this.class.instances && this.class.instances[this.id].data){
-			_callback(this.class.instances[this.id].data);
+		if(GameObject.instances && GameObject.instances[this.id].data){
+			_callback(GameObject.instances[this.id].data);
 		} else {
 			this.class.model.findById(this.id, bind(function(err, _object) {
 				if (err) throw err;
-				this.class.instances[this.id].data = _object;
+				GameObject.instances[this.id].data = _object;
 				_callback(_object);
 			}, this));
 		}

@@ -20,10 +20,21 @@ export class Inventar {
 	
 	public ngAfterViewInit() {
 		if(this.id = this.elementRef.nativeElement.getAttribute('id')){
-			this.socket = io('/'+this.id); 
-			console.log('/'+this.id);
-			this.socket.on('loadInventar', bind(this.loadInventar, this));
-			this.socket.on('updateInventar', bind(this.updateInventar, this));
+			this.emit('load', null, this.loadInventar);
+			this.on('update', this.updateInventar);
+		}
+	}
+	
+	public emit(_action, _data, _callback?){
+		Session.socket.emit(_action, this.id, _data, _callback?bind(_callback, this):null);
+	}
+	
+	public on(_eventname, _callback){
+		console.log(_eventname, this[_eventname]);
+		if(this[_eventname]){
+			this[_eventname].on(bind(_callback, this));
+		} else {
+			Session.on(_eventname, this.id, bind(_callback, this));
 		}
 	}
 	

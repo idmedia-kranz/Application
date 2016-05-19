@@ -1,8 +1,7 @@
 class Inventar extends GameObject {
 	constructor(_id:string){
 		super(_id);
-		this.io = socket_io.of('/'+this.id);
-		this.io.on('connection', bind(this.clientConnect, this));
+		this.on('load', this.loadInventar);
 	}
 	
 	public static getSchemaData();
@@ -10,8 +9,8 @@ class Inventar extends GameObject {
 		objects: [{class: String, id: String}]
 	}}
 		
-	public clientConnect(_socket){
-		console.log('connected '+this.class.name+', client:', _socket.client.id);
+	public loadInventar(_socket, _data, _callback){
+		console.log('Load '+this.class.name+', client:', _socket.client.id);
 		this.loadObject(bind(function(_data?){
 			if(this.data){
 				for(let object of this.data.objects){
@@ -19,7 +18,7 @@ class Inventar extends GameObject {
 						GameObject.classes[object.class].loadObjects([object.id]);
 					}
 				}
-				_socket.emit('loadInventar', this.jsonData() );
+				_callback(this.jsonData());
 			}
 		}, this));
 	}	

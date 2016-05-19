@@ -1,4 +1,7 @@
 /// <reference path="database.ts"/>
+/// <reference path="events.ts"/>
+/// <reference path="session.ts"/>
+
 const bind = (f, context, ...x) => (...y) => f.apply(context, x.concat(y));
 
 var express = require('express');
@@ -13,7 +16,10 @@ var dbconfig = require('./dbconfig.json');
 var database = new Database(mongoose, dbconfig.server, dbconfig.port, dbconfig.database, dbconfig.options);
 
 /// <reference path="socket.ts"/>
-/// <reference path="session.ts"/>
+
+var session = new Session();
+
+/// <reference path="playground.ts"/>
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/app/index.html');

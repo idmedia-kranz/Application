@@ -24,10 +24,9 @@ export class Playground {
 	private socket:any;
 	private loaded:boolean;
 	
-    constructor(private session: Session){
+    constructor(private session:Session){
+		Session.socket.on('loadPlayground', bind(this.receiveInventar, this));
 		this.loaded = false;
-		this.socket = io('/playground'); 
-		this.socket.emit('getInventar', bind(this.receiveInventar, this));
     }
 	
 	private receiveInventar(_id){

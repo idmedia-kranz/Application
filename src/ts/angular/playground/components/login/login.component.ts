@@ -16,13 +16,13 @@ export class Login {
 	private logged:boolean;
 	private error:boolean;
 	
-	constructor(private session: Session){
+	constructor(){
 		this.logged = false;
 		this.error = false;
 	}
 	
 	public login(){
-		this.session.socket.emit('authenticate', (this.username||'testuser'), this.passwort, bind(function(success){
+		Session.socket.emit('authenticate', (this.username||'testuser'), this.passwort, bind(function(success){
 				this.logged = success;
 				this.error = !this.logged;
 		}, this));

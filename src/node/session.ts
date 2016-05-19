@@ -2,9 +2,11 @@ class Session {
 	
 	public static actions = ['load', 'update'];
 	
-	private io;
 	private sockets = {};
 	private events = {};
+	private eventOnAuthenticate = new LiteEvent<string>(); 
+	public get authenticate(): ILiteEvent<string> { return this.eventOnAuthenticate; } 
+	public io;
 	
 	constructor(){
 		this.io = socket_io.of('/session');
@@ -12,29 +14,31 @@ class Session {
 	}
 	
 	private clientConnect(_socket){
-			console.log('Session created');
 			_socket.on('authenticate', bind(function(_username, _passwort, _callback){
 				this.sockets[_username] = _socket;
 				this.setActions(_socket);
 				_callback(true);
+				this.eventOnAuthenticate.trigger(_socket);
 			}, this));
+	}
+	
+	private setAction(_action, _socket){
+		_socket.on(_action, bind(function(_id, _data, _callback){
+			if(this.events[_id]&&this.events[_id][_action]){
+				this.events[_id][_action](_socket, _data, _callback);
+			} else {
+				console.log('Action '+_action+' for '+_id+' not found');
+			}
+		}, this));
 	}
 	
 	private setActions(_socket){
 		for(var action of Session.actions){
-			_socket.on(action, bind(function(_id, _data?){
-				console.log('Session receive ', _id, action, _data);
-				if(this.events[_id]&&this.events[_id][action]){
-					this.events[_id][action](_socket, _data);
-				} else {
-					console.log('Action '+action+' for '+_id+' not found');
-				}
-			}, this));
+			this.setAction(action, _socket);
 		}
 	}
 	
 	public on(_action, _id, _func){
-		console.log('Session on', _action, _id);
 		this.events[_id] = this.events[_id] || {};
 		this.events[_id][_action] = _func;
 	}
@@ -47,4 +51,3 @@ class Session {
 		return _id+'_update';
 	}
 }
-var session = new Session();

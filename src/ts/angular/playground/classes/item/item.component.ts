@@ -1,7 +1,8 @@
-import {Component, forwardRef, Inject} from 'angular2/core';
+import {Component, forwardRef, Injector} from 'angular2/core';
 import {Session, WorldSize, PropertiesPipe} from '../../shared/index';
 import {Playground} from '../../playground.component';
 import {Inventar} from '../../components/index';
+import {Player} from '../index';
 
 const bind = (f, context, ...x) => (...y) => f.apply(context, x.concat(y));
 
@@ -45,17 +46,27 @@ export class Item {
 		}
 	};
 	
-	constructor(private session:Session){
+	constructor(){
 	}
 	
 	public load(_id){
 		console.log('load', _id);
 		if(this.id = _id){
 			Item.instances[this.id] = this;
-			this.session.socket.emit('load', this.id);
-			console.log('emit('+this.id+'_load)');
-			//this.socket.on(Session.load(this.id), bind(this.loadItem, this));
-			//this.socket.on(Session.update(this.id), bind(this.updateItem, this));
+			this.emit('load', null, bind(this.loadItem, this));
+			this.on('update', bind(this.updateItem, this));
+		}
+	}
+	
+	public emit(_action, _data, _callback?){
+		Session.socket.emit(_action, this.id, _data, _callback?bind(_callback, this):null);
+	}
+	
+	public on(_eventname, _callback){
+		if(this[_eventname]){
+			this[_eventname].on(bind(_callback, this));
+		} else {
+			Session.on(_eventname, this.id, bind(_callback, this));
 		}
 	}
 	
@@ -104,7 +115,7 @@ export class Item {
 			if(this.droppable){
 				var _this = this;
 				this.transport = true;
-				this.socket.emit('updateItem', {position: this.position});
+				this.emit('update', {position: this.position});
 				setTimeout(function(){
 					_this.dragged = false;
 					_this.transport = false;
