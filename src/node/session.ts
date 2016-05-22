@@ -3,7 +3,6 @@ class Session {
 	public static actions = ['load', 'update'];
 	
 	private sockets = {};
-	private events = {};
 	private eventOnAuthenticate = new LiteEvent<string>(); 
 	public get authenticate(): ILiteEvent<string> { return this.eventOnAuthenticate; } 
 	public io;
@@ -24,11 +23,8 @@ class Session {
 	
 	private setAction(_action, _socket){
 		_socket.on(_action, bind(function(_id, _data, _callback){
-			if(this.events[_id]&&this.events[_id][_action]){
-				this.events[_id][_action](_socket, _data, _callback);
-			} else {
-				console.log('Action '+_action+' for '+_id+' not found');
-			}
+			if(GameObject.instances[_id] && typeof GameObject.instances[_id][_action] === "function")
+			GameObject.instances[_id][_action](_socket, _data, _callback);
 		}, this));
 	}
 	
@@ -36,18 +32,5 @@ class Session {
 		for(var action of Session.actions){
 			this.setAction(action, _socket);
 		}
-	}
-	
-	public on(_action, _id, _func){
-		this.events[_id] = this.events[_id] || {};
-		this.events[_id][_action] = _func;
-	}
-	
-	public static load(_id):string{
-		return _id+'_load';
-	}
-	
-	public static update(_id):string{
-		return _id+'_update';
 	}
 }

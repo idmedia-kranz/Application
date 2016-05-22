@@ -1,8 +1,7 @@
 import {Component, forwardRef, Injector} from 'angular2/core';
-import {Session, WorldSize, PropertiesPipe} from '../../shared/index';
+import {WorldSize, PropertiesPipe} from '../../shared/index';
 import {Playground} from '../../playground.component';
-import {Inventar} from '../../components/index';
-import {Player} from '../index';
+import {Session, GameObject, Inventar, Player} from '../index';
 
 const bind = (f, context, ...x) => (...y) => f.apply(context, x.concat(y));
 
@@ -14,7 +13,7 @@ const bind = (f, context, ...x) => (...y) => f.apply(context, x.concat(y));
 	directives: [forwardRef(() => Inventar), Item]
 })
 
-export class Item {
+export class Item extends GameObject{
 
 	public id:string;
 	public name:string;
@@ -54,7 +53,6 @@ export class Item {
 		if(this.id = _id){
 			Item.instances[this.id] = this;
 			this.emit('load', null, bind(this.loadItem, this));
-			this.on('update', bind(this.updateItem, this));
 		}
 	}
 	
@@ -63,11 +61,7 @@ export class Item {
 	}
 	
 	public on(_eventname, _callback){
-		if(this[_eventname]){
-			this[_eventname].on(bind(_callback, this));
-		} else {
-			Session.on(_eventname, this.id, bind(_callback, this));
-		}
+		this[_eventname].on(bind(_callback, this));
 	}
 	
 	private loadItem(_item:any, _definition?:any){
@@ -87,13 +81,12 @@ export class Item {
 		this.children = {};
 	}
 
-	public updateItem(_data){
+	public update(_data){
 		console.log('updateItem', _data);
 		for (var attr in _data) {
 			this[attr] = _data[attr];
 		}
 	}
-	
 	
 	private onMouseenter(event) { 
 		if(!this.transport){

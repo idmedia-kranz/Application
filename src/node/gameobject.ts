@@ -26,11 +26,7 @@ class GameObject {
 	}}
 	
 	public on(_eventname, _callback){
-		if(this[_eventname]){
-			this[_eventname].on(bind(_callback, this));
-		} else {
-			session.on(_eventname, this.id, bind(_callback, this));
-		}
+		this[_eventname].on(bind(_callback, this));
 	}
 	
 	public emit(_action, _data, _callback){

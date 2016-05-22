@@ -3,8 +3,8 @@
 const bind = (f, context, ...x) => (...y) => f.apply(context, x.concat(y));
 
 import {Component, DynamicComponentLoader, ViewContainerRef} from 'angular2/core';
-import {Login, Inventar} from './components/index';
-import {PropertiesPipe, Session} from './shared/index';
+import {Session, Login, Inventar } from './classes/index';
+import {PropertiesPipe} from './shared/index';
 
 @Component({
     selector: 'playground',

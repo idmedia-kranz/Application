@@ -11,7 +11,6 @@ class Item extends GameObject {
 	
 	constructor(_id:string){
 		super(_id);
-		this.setEvents();
 	}
 	
 	public static getSchemaData();
@@ -20,13 +19,8 @@ class Item extends GameObject {
 		position: { x: Number, y: Number },
 		inventarId: String
 	}}
-	
-	private setEvents(){
-		this.on('load', this.loadItem);
-		this.on('update', this.updateItem);
-	}
-	
-	public loadItem(_socket, _data, _callback){
+
+	public load(_socket, _data, _callback){
 		this.loadObject(bind(function(_data?){
 			if(this.data){
 				if(this.data.inventarId){
@@ -48,7 +42,7 @@ class Item extends GameObject {
 		this.eventOnLoad.trigger(_socket);
 	}	
 	
-	public updateItem(_socket, _data){
+	public update(_socket, _data){
 		if(this.data){
 			for (var attr in _data) {
 				this.data[attr] = _data[attr];

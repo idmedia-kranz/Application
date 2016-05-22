@@ -1,7 +1,6 @@
 class Inventar extends GameObject {
 	constructor(_id:string){
 		super(_id);
-		this.on('load', this.loadInventar);
 	}
 	
 	public static getSchemaData();
@@ -9,7 +8,7 @@ class Inventar extends GameObject {
 		objects: [{class: String, id: String}]
 	}}
 		
-	public loadInventar(_socket, _data, _callback){
+	public load(_socket, _data, _callback){
 		console.log('Load '+this.class.name+', client:', _socket.client.id);
 		this.loadObject(bind(function(_data?){
 			if(this.data){

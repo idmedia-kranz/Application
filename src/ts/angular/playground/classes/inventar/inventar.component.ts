@@ -2,7 +2,7 @@ const bind = (f, context, ...x) => (...y) => f.apply(context, x.concat(y));
 
 import {Component, DynamicComponentLoader, ViewContainerRef, ElementRef} from 'angular2/core';
 import * as components from '../../classes/index';
-import {Session} from '../../shared/index';
+import {Session} from '../index';
 
 @Component({
     selector: 'inventar',
@@ -21,7 +21,6 @@ export class Inventar {
 	public ngAfterViewInit() {
 		if(this.id = this.elementRef.nativeElement.getAttribute('id')){
 			this.emit('load', null, this.loadInventar);
-			this.on('update', this.updateInventar);
 		}
 	}
 	
@@ -61,7 +60,7 @@ export class Inventar {
 		delete this.instances[_id];
 	}
 	
-	public updateInventar(){
+	public update(){
 		
 	}	
 	
